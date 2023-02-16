@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Эльвира Черненко](https://up.htmlacademy.ru/javascript/28/user/2127963).
-* Наставник: `Павел Нюкало`(https://htmlacademy.ru/profile/nyukalopavel).
+* Наставник: [Павел Нюкало](https://htmlacademy.ru/profile/nyukalopavel).
 
 ---
 
