@@ -16,12 +16,18 @@ const extractNumbers = (text) => {
   let newText = '';
 
   if (typeof text === 'number') {
-    text = String(text);
-  }
+    const textToString = String(text);
+    for (let i = 0; i < textToString.length; i++) {
+      if (textToString[i] !== ' ' && !isNaN(textToString[i] - 0)) {
+        newText += textToString[i];
+      }
+    }
+  } else {
 
-  for (let i = 0; i < text.length; i++) {
-    if (text[i] !== ' ' && !isNaN(text[i] - 0)) {
-      newText += text[i];
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] !== ' ' && !isNaN(text[i] - 0)) {
+        newText += text[i];
+      }
     }
   }
 
@@ -29,22 +35,24 @@ const extractNumbers = (text) => {
 };
 
 const createFileAddress = (address, minLength, additionalText) => {
+  let fileAddress;
   if (address.length >= minLength) {
-    return address;
+    fileAddress = address;
+    return fileAddress;
   }
   const additionalSymbolsNumber = minLength - address.length;
 
   if (additionalText.length > additionalSymbolsNumber) {
-    address = additionalText.slice(0, additionalSymbolsNumber - additionalText.length) + address;
-    return address;
+    fileAddress = additionalText.slice(0, additionalSymbolsNumber - additionalText.length) + address;
+    return fileAddress;
   }
 
   while ((additionalSymbolsNumber / additionalText.length) >= 2) {
     additionalText += additionalText;
   }
 
-  address = additionalText.slice(0, additionalSymbolsNumber - additionalText.length) + additionalText + address;
-  return address;
+  fileAddress = additionalText.slice(0, additionalSymbolsNumber - additionalText.length) + additionalText + address;
+  return fileAddress;
 };
 
 checkCommentLength('hello', 20);
