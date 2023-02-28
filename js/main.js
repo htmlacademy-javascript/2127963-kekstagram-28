@@ -7,7 +7,7 @@ const COMMENT_ID_MAX = 1000;
 const AVATAR_NUMBER_MIN = 1;
 const AVATAR_NUMBER_MAX = 6;
 
-const NAMES = ['Jean-Cla;ude', 'Sylvester', 'Jackie', 'Arnold', 'Bruce W.', 'Bruce L.'];
+const NAMES = ['Jean-Claude', 'Sylvester', 'Jackie', 'Arnold', 'Bruce W.', 'Bruce L.'];
 
 const PHOTO_DESCRIPTIONS = [
   'My lovely bike',
@@ -56,23 +56,54 @@ const getRandomInteger = (a, b) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
-const createPhoto = () => ({
-  id: getRandomInteger(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX),
-  url: `photos/${getRandomInteger(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX)}.jpg`,
-  description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
-  likes: getRandomInteger(LIKES_NUMBER_MIN, LIKES_NUMBER_MAX),
-  comments: {
-    id: getRandomInteger(COMMENT_ID_MIN, COMMENT_ID_MAX),
-    avatar: `img/avatar-${getRandomInteger(AVATAR_NUMBER_MIN, AVATAR_NUMBER_MAX)}.svg`,
-    message: getRandomArrayElement(MESSAGES),
-    name: getRandomArrayElement(NAMES),
-  },
+const createNumbersArray = (min, max) => {
+  const numbers = [];
+  for (let i = min; i <= max; i++) {
+    numbers.push(i);
+  }
+  return numbers;
+};
 
-});
+const shuffleArray = (elements) => {
 
-const createPhotos = () => {
-  const photos = Array.from({length: PHOTOS_NUMBER_MAX}, createPhoto);
+  for (let i = 0; i < elements.length; i++) {
+    const removedElementIndex = getRandomInteger(0, elements.length - 1);
+    const removedElement = elements[removedElementIndex];
+    elements.splice(removedElementIndex, 1);
+    elements.push(removedElement);
+  }
+
+  return elements;
+};
+
+const createPhotos = (photosNumber) => {
+
+  const photos = [];
+
+  let photoIds = createNumbersArray(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX);
+  let urls = createNumbersArray(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX);
+  let commentIds = createNumbersArray(COMMENT_ID_MIN, COMMENT_ID_MAX);
+
+  photoIds = shuffleArray(photoIds);
+  commentIds = shuffleArray(commentIds);
+  urls = shuffleArray(urls);
+
+  for (let i = 0; i < photosNumber; i++) {
+    photos[i] = {
+      id: photoIds[i],
+      url: `photos/${urls[i]}.jpg`,
+      description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
+      likes: getRandomInteger(LIKES_NUMBER_MIN, LIKES_NUMBER_MAX),
+      comments: {
+        id: commentIds[i],
+        avatar: `img/avatar-${getRandomInteger(AVATAR_NUMBER_MIN, AVATAR_NUMBER_MAX)}.svg`,
+        message: getRandomArrayElement(MESSAGES),
+        name: getRandomArrayElement(NAMES),
+      },
+    };
+  }
+
   return photos;
 };
 
-createPhotos();
+createPhotos(PHOTOS_NUMBER_MAX);
