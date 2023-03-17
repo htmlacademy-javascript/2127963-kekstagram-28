@@ -6,6 +6,8 @@ const LIKES_NUMBER_MIN = 15;
 const LIKES_NUMBER_MAX = 200;
 const COMMENT_ID_MIN = 1;
 const COMMENT_ID_MAX = 1000;
+const COMMENTS_NUMBER_MIN = 1;
+const COMMENTS_NUMBER_MAX = 10;
 const AVATAR_NUMBER_MIN = 1;
 const AVATAR_NUMBER_MAX = 6;
 
@@ -62,21 +64,27 @@ const createPhotos = (photosNumber) => {
   urls = shuffleArray(urls);
 
   for (let i = 0; i < photosNumber; i++) {
+    const commentsNumber = getRandomInteger(COMMENTS_NUMBER_MIN, COMMENTS_NUMBER_MAX);
+
+    const pictureComments = [];
+    for (let j = 0; j < commentsNumber; j++) {
+      pictureComments[j] = {};
+      pictureComments[j].id = commentIds[i];
+      pictureComments[j].avatar = `img/avatar-${getRandomInteger(AVATAR_NUMBER_MIN, AVATAR_NUMBER_MAX)}.svg`;
+      pictureComments[j].message = getRandomArrayElement(MESSAGES);
+      pictureComments[j].name = getRandomArrayElement(NAMES);
+    }
+
     photos[i] = {
       id: photoIds[i],
       url: `photos/${urls[i]}.jpg`,
       description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
       likes: getRandomInteger(LIKES_NUMBER_MIN, LIKES_NUMBER_MAX),
-      comments: {
-        id: commentIds[i],
-        avatar: `img/avatar-${getRandomInteger(AVATAR_NUMBER_MIN, AVATAR_NUMBER_MAX)}.svg`,
-        message: getRandomArrayElement(MESSAGES),
-        name: getRandomArrayElement(NAMES),
-      },
+      comments: pictureComments,
     };
   }
 
   return photos;
 };
 
-createPhotos(PHOTOS_NUMBER_MAX);
+export { createPhotos, PHOTOS_NUMBER_MAX };
