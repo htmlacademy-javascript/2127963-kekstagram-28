@@ -1,5 +1,6 @@
 import { createPhotos, PHOTOS_NUMBER_MAX } from './data.js';
 import { showBigPicture } from './big-picture.js';
+
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture')
   .content
@@ -7,22 +8,47 @@ const pictureTemplate = document.querySelector('#picture')
 
 const pictures = createPhotos(PHOTOS_NUMBER_MAX);
 
-const pictureListFragment = document.createDocumentFragment();
+const createPicture = ({url, likes, comments, id}) => {
 
-pictures.forEach((picture) => {
   const pictureElement = pictureTemplate.cloneNode(true);
-  pictureElement.querySelector('.picture__img').src = picture.url;
-  pictureElement.querySelector('.picture__likes').textContent = picture.likes;
-  pictureElement.querySelector('.picture__comments').textContent = picture.comments.length;
-  pictureElement.dataset.pictureId = picture.id;
-  pictureListFragment.append(pictureElement);
 
-  pictureElement.addEventListener ('click', (evt) => {
+  pictureElement.querySelector('.picture__img').src = url;
+  pictureElement.querySelector('.picture__likes').textContent = likes;
+  pictureElement.querySelector('.picture__comments').textContent = comments.length;
+  pictureElement.dataset.pictureId = id;
+
+  return pictureElement;
+
+};
+
+const renderPictures = (photos) => {
+
+  picturesList.addEventListener ('click', (evt) => {
     evt.preventDefault();
+    const smallPicture = evt.target.closest('[data-picture-id]');
+    if (!smallPicture) {
+      return;
+    }
 
-    showBigPicture(picture);
+    const bigPicture = photos.find((photo) =>
+      photo.id === Number(smallPicture.dataset.pictureId)
+    );
+
+    showBigPicture(bigPicture);
 
   });
-});
 
-picturesList.append(pictureListFragment);
+
+  const pictureListFragment = document.createDocumentFragment();
+
+  photos.forEach((photo) => {
+    const pictureElement = createPicture(photo);
+    pictureListFragment.append(pictureElement);
+
+  });
+
+  picturesList.append(pictureListFragment);
+
+};
+
+renderPictures(pictures);
