@@ -56,12 +56,10 @@ const createPhotos = (photosNumber) => {
   const photos = [];
 
   let photoIds = createNumbersArray(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX);
-  let urls = createNumbersArray(PHOTOS_NUMBER_MIN, PHOTOS_NUMBER_MAX);
   let commentIds = createNumbersArray(COMMENT_ID_MIN, COMMENT_ID_MAX);
 
   photoIds = shuffleArray(photoIds);
   commentIds = shuffleArray(commentIds);
-  urls = shuffleArray(urls);
 
   for (let i = 0; i < photosNumber; i++) {
     const commentsNumber = getRandomInteger(COMMENTS_NUMBER_MIN, COMMENTS_NUMBER_MAX);
@@ -77,7 +75,7 @@ const createPhotos = (photosNumber) => {
 
     photos[i] = {
       id: photoIds[i],
-      url: `photos/${urls[i]}.jpg`,
+      url: `photos/${photoIds[i]}.jpg`,
       description: getRandomArrayElement(PHOTO_DESCRIPTIONS),
       likes: getRandomInteger(LIKES_NUMBER_MIN, LIKES_NUMBER_MAX),
       comments: pictureComments,
