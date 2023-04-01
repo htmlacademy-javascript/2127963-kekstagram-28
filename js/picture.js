@@ -24,7 +24,7 @@ const createPicture = ({url, likes, comments, id}) => {
 const renderPictures = (photos) => {
 
   picturesList.addEventListener ('click', (evt) => {
-    evt.preventDefault();
+    //evt.preventDefault();
     const smallPicture = evt.target.closest('[data-picture-id]');
     if (!smallPicture) {
       return;
