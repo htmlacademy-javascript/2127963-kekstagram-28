@@ -1,14 +1,21 @@
 import { isEscapeKey } from './util.js';
 
+const MAX_COMMENT_LENGTH = 10;
+const COMMENT_ERROR_TEXT = 'Не более 140 символов';
+
 const imageUploadForm = document.querySelector('.img-upload__form');
-//const imageUploadStart = imageUploadForm.querySelector('.img-upload__start');
 const imageUploadInput = imageUploadForm.querySelector('.img-upload__input');
 const imageEditForm = imageUploadForm.querySelector('.img-upload__overlay');
 const editFormCloseButton = imageEditForm.querySelector('.img-upload__cancel');
+const commentText = imageEditForm.querySelector('.text__description');
 
 const closeEditForm = () => {
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
+
+  imageUploadInput.value = '';
+  commentText.value = '';
+
 
   document.removeEventListener('keydown', onDocumentKeydown);
 };
@@ -35,3 +42,20 @@ function onDocumentKeydown (evt) {
     closeEditForm();
   }
 }
+
+const pristine = new Pristine(imageUploadForm, {
+  classTo: 'img-upload__field-wrapper',
+  errorClass: 'img-upload__field-wrapper--invalid',
+  successClass: 'img-upload__field-wrapper--valid',
+  errorTextParent: 'img-upload__field-wrapper',
+
+});
+
+const validateComment = (comment) => comment.length <= MAX_COMMENT_LENGTH;
+
+pristine.addValidator(commentText, validateComment, COMMENT_ERROR_TEXT);
+
+imageUploadForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  pristine.validate();
+});
