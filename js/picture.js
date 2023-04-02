@@ -30,6 +30,8 @@ const renderPictures = (photos) => {
       return;
     }
 
+    evt.preventDefault();
+
     const bigPicture = photos.find((photo) =>
       photo.id === Number(smallPicture.dataset.pictureId)
     );
