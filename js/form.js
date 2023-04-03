@@ -42,10 +42,7 @@ pristine.addValidator(hashtagInput, validateHashtagNumber, HASHTAGS_NUMBER_ERROR
 
 const isUniqueHashtag = (hashtagFieldValue) => {
   const hashtags = getArrayFromString(hashtagFieldValue);
-  const uniqueHashtags = new Set();
-  hashtags.forEach((hashtag) => {
-    uniqueHashtags.add(hashtag);
-  });
+  const uniqueHashtags = new Set(hashtags);
 
   return uniqueHashtags.size === hashtags.length;
 };
@@ -82,10 +79,7 @@ const closeEditForm = () => {
   pristine.reset();
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
-
-  /*imageUploadInput.value = '';
-  commentTextInput.value = '';
-  hashtagInput.value = '';*/
+  imageUploadInput.value = '';
 
   document.removeEventListener('keydown', onDocumentKeydown);
 };
