@@ -1,4 +1,6 @@
 import { isEscapeKey, getArrayFromString } from './util.js';
+import { resetScale } from './scale.js';
+import { resetEffects } from './effects.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const COMMENT_ERROR_MESSAGE = 'Не более 140 символов';
@@ -15,6 +17,7 @@ const editFormCloseButton = imageEditForm.querySelector('.img-upload__cancel');
 const imageUploadText = imageEditForm.querySelector('.img-upload__text');
 const hashtagInput = imageUploadText.querySelector('.text__hashtags');
 const commentTextInput = imageUploadText.querySelector('.text__description');
+
 
 const pristine = new Pristine(imageUploadForm, {
   classTo: 'img-upload__field-wrapper',
@@ -77,6 +80,8 @@ true
 const closeEditForm = () => {
   imageUploadForm.reset();
   pristine.reset();
+  resetScale();
+  resetEffects();
   imageEditForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
   imageUploadInput.value = '';
@@ -87,6 +92,7 @@ const closeEditForm = () => {
 const openEditForm = () => {
   imageEditForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
+  resetScale();
 
   document.addEventListener('keydown', onDocumentKeydown);
   editFormCloseButton.addEventListener('click', closeEditForm);
