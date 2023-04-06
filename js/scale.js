@@ -2,6 +2,7 @@ const SCALE_DEFAULT = 100;
 const SCALE_STEP = 25;
 const SCALE_MIN = 25;
 const SCALE_MAX = 100;
+const DIVISOR = 100;
 
 const scaleControlElement = document.querySelector('.scale__control--value');
 const smallerButtonElement = document.querySelector('.scale__control--smaller');
@@ -9,7 +10,7 @@ const biggerButtonElement = document.querySelector('.scale__control--bigger');
 const imageElement = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
-  imageElement.style.transform = `scale(${value / 100})`;
+  imageElement.style.transform = `scale(${value / DIVISOR})`;
   scaleControlElement.value = `${value}%`;
 };
 
