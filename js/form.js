@@ -1,6 +1,8 @@
 import { isEscapeKey, getArrayFromString } from './util.js';
 import { resetScale } from './scale.js';
 import { resetEffects } from './effects.js';
+import { sendData } from './api.js';
+import { showSuccessMessage, showErrorMessage } from './message.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const COMMENT_ERROR_MESSAGE = 'Не более 140 символов';
@@ -10,6 +12,11 @@ const NOT_UNIQUE_HASHTAG_MESSAGE = 'Хэш-теги должны быть уни
 const VALID_SYMBOL = /^#[a-zа-яё]{1,19}$/i;
 const MAX_HASHTAGS_NUMBER = 5;
 
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
+
 const imageUploadForm = document.querySelector('.img-upload__form');
 const imageUploadInput = imageUploadForm.querySelector('.img-upload__input');
 const imageEditForm = imageUploadForm.querySelector('.img-upload__overlay');
@@ -17,6 +24,7 @@ const editFormCloseButton = imageEditForm.querySelector('.img-upload__cancel');
 const imageUploadText = imageEditForm.querySelector('.img-upload__text');
 const hashtagInput = imageUploadText.querySelector('.text__hashtags');
 const commentTextInput = imageUploadText.querySelector('.text__description');
+const submitButton = imageEditForm.querySelector('.img-upload__submit');
 
 
 const pristine = new Pristine(imageUploadForm, {
@@ -27,7 +35,20 @@ const pristine = new Pristine(imageUploadForm, {
 
 });
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
 const validateHashtagSymbols = (hashtagFieldValue) => {
+  if (!hashtagFieldValue) {
+    return true;
+  }
   const hashtags = getArrayFromString(hashtagFieldValue);
   return hashtags.every((hashtag) => VALID_SYMBOL.test(hashtag));
 
@@ -56,10 +77,25 @@ const validateComment = (commentFieldValue) => commentFieldValue.length <= MAX_C
 
 pristine.addValidator(commentTextInput, validateComment, COMMENT_ERROR_MESSAGE);
 
-imageUploadForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+
+const setOnFormSubmit = (onSuccess) => {
+  imageUploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+
+    if (isValid) {
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then(onSuccess)
+        .then(showSuccessMessage)
+        .catch(showErrorMessage)
+        .finally(unblockSubmitButton);
+    }
+  });
+
+};
+
 
 imageUploadText.addEventListener('focus', (evt) => {
   if (evt.target.closest('.img-upload__field-wrapper')) {
@@ -109,3 +145,5 @@ function onDocumentKeydown (evt) {
     closeEditForm();
   }
 }
+
+setOnFormSubmit (closeEditForm);

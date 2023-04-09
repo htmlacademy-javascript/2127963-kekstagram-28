@@ -1,4 +1,4 @@
-import { createPhotos, PHOTOS_NUMBER_MAX } from './data.js';
+//import { createPhotos, PHOTOS_NUMBER_MAX } from './data.js';
 import { showBigPicture } from './big-picture.js';
 
 const picturesList = document.querySelector('.pictures');
@@ -6,7 +6,7 @@ const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
-const pictures = createPhotos(PHOTOS_NUMBER_MAX);
+//const pictures = createPhotos(PHOTOS_NUMBER_MAX);
 
 const createPicture = ({url, likes, comments, id}) => {
 
@@ -24,7 +24,7 @@ const createPicture = ({url, likes, comments, id}) => {
 const renderPictures = (photos) => {
 
   picturesList.addEventListener ('click', (evt) => {
-    //evt.preventDefault();
+
     const smallPicture = evt.target.closest('[data-picture-id]');
     if (!smallPicture) {
       return;
@@ -53,4 +53,5 @@ const renderPictures = (photos) => {
 
 };
 
-renderPictures(pictures);
+//renderPictures(pictures);
+export { renderPictures };
