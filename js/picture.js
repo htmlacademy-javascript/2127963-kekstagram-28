@@ -1,12 +1,9 @@
-//import { createPhotos, PHOTOS_NUMBER_MAX } from './data.js';
 import { showBigPicture } from './big-picture.js';
 
 const picturesList = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
-
-//const pictures = createPhotos(PHOTOS_NUMBER_MAX);
 
 const createPicture = ({url, likes, comments, id}) => {
 
@@ -53,5 +50,4 @@ const renderPictures = (photos) => {
 
 };
 
-//renderPictures(pictures);
 export { renderPictures };

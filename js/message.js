@@ -1,10 +1,14 @@
 import { isEscapeKey } from './util.js';
 
-const showSuccessMessage = () => {
-  const successMessageTemplate = document.querySelector('#success')
-    .content
-    .querySelector('.success');
+const errorMessageTemplate = document.querySelector('#error')
+  .content
+  .querySelector('.error');
 
+const successMessageTemplate = document.querySelector('#success')
+  .content
+  .querySelector('.success');
+
+const showSuccessMessage = () => {
   const successMessageElement = successMessageTemplate.cloneNode(true);
 
   document.body.insertAdjacentElement('beforeend', successMessageElement);
@@ -28,10 +32,6 @@ const showSuccessMessage = () => {
 };
 
 const showErrorMessage = () => {
-  const errorMessageTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
-
   const errorMessageElement = errorMessageTemplate.cloneNode(true);
   document.body.insertAdjacentElement('beforeend', errorMessageElement);
   const errorCloseButton = errorMessageElement.querySelector('.error__button');

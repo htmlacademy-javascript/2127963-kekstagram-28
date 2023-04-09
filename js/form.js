@@ -87,12 +87,14 @@ const setOnFormSubmit = (onSuccess) => {
     if (isValid) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then(onSuccess)
-        .then(showSuccessMessage)
-        .catch(
-          showErrorMessage,
-          document.removeEventListener('keydown', onDocumentKeydown)
-        )
+        .then(() => {
+          onSuccess();
+          showSuccessMessage();
+        })
+        .catch(() => {
+          showErrorMessage();
+          document.removeEventListener('keydown', onDocumentKeydown);
+        })
         .finally(unblockSubmitButton);
     }
   });
