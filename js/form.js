@@ -89,7 +89,10 @@ const setOnFormSubmit = (onSuccess) => {
       sendData(new FormData(evt.target))
         .then(onSuccess)
         .then(showSuccessMessage)
-        .catch(showErrorMessage)
+        .catch(
+          showErrorMessage,
+          document.removeEventListener('keydown', onDocumentKeydown)
+        )
         .finally(unblockSubmitButton);
     }
   });
