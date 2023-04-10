@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 const AVATAR_HEIGHT = 35;
 const AVATAR_WIDTH = 35;
+const COMMENTS_TO_SHOW = 5;
 
 const bigPictureElement = document.querySelector('.big-picture');
 const bigPictureImageElement = bigPictureElement.querySelector('.big-picture__img img');
@@ -21,6 +22,7 @@ const createCommentElements = (commentNumber, socialComments) => {
     const commentTextElement = document.createElement('p');
 
     commentElement.classList.add('social__comment');
+    commentElement.classList.add('hidden');
     avatarElement.classList.add('social__picture');
     commentTextElement.classList.add('social__text');
 
@@ -30,17 +32,41 @@ const createCommentElements = (commentNumber, socialComments) => {
     avatarElement.height = String(AVATAR_HEIGHT);
     commentTextElement.textContent = socialComments[i].message;
 
-
     commentElement.append(avatarElement);
     commentElement.append(commentTextElement);
-
     socialCommentsList.append(commentElement);
+  }
+};
+
+let shownComments = 0;
+
+const showComments = () => {
+
+  let commentsToShowNumber = COMMENTS_TO_SHOW;
+  const allComments = socialCommentsList.querySelectorAll('.social__comment');
+  const hiddenComments = socialCommentsList.querySelectorAll('.hidden');
+
+  if (hiddenComments.length < COMMENTS_TO_SHOW) {
+    commentsToShowNumber = hiddenComments.length;
+  }
+
+  for (let i = 0; i < commentsToShowNumber; i++) {
+    hiddenComments[i].classList.remove('hidden');
+    shownComments += 1;
+  }
+
+  commentCountElement.textContent = `${shownComments} из ${allComments.length} комментариев`;
+  if (shownComments === allComments.length) {
+    commentsLoaderElement.classList.add('hidden');
   }
 };
 
 const closeBigPicture = () => {
   bigPictureElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
+  shownComments = 0;
+  socialCommentsList.innerHTML = '';
+  commentsLoaderElement.classList.remove('hidden');
 
   document.removeEventListener('keydown', onDocumentKeydown);
 };
@@ -52,15 +78,14 @@ const showBigPicture = ({url, likes, comments, description}) => {
   bigPictureImageElement.src = url;
   likesNumberElement.textContent = likes;
   commentsNumberElement.textContent = comments.length;
-  createCommentElements(comments.length, comments);
   pictureDescriptiionElement.textContent = description;
 
-  commentCountElement.classList.add('hidden');
-  commentsLoaderElement.classList.add('hidden');
+  createCommentElements(comments.length, comments);
+  showComments();
 
+  commentsLoaderElement.addEventListener('click', showComments);
   document.addEventListener('keydown', onDocumentKeydown);
   pictureCloseButton.addEventListener('click', closeBigPicture);
-
 };
 
 function onDocumentKeydown (evt) {
