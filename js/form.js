@@ -3,6 +3,7 @@ import { resetScale } from './scale.js';
 import { resetEffects } from './effects.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
+import { uploadFile } from './user-picture.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const COMMENT_ERROR_MESSAGE = 'Не более 140 символов';
@@ -65,7 +66,7 @@ const validateHashtagNumber = (hashtagFieldValue) => {
 pristine.addValidator(hashtagInput, validateHashtagNumber, HASHTAGS_NUMBER_ERROR_MESSAGE);
 
 const isUniqueHashtag = (hashtagFieldValue) => {
-  const hashtags = getArrayFromString(hashtagFieldValue);
+  const hashtags = getArrayFromString(hashtagFieldValue.toLowerCase());
   const uniqueHashtags = new Set(hashtags);
 
   return uniqueHashtags.size === hashtags.length;
@@ -150,5 +151,6 @@ function onDocumentKeydown (evt) {
     closeEditForm();
   }
 }
+uploadFile();
 
 setOnFormSubmit (closeEditForm);

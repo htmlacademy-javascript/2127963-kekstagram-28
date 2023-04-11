@@ -27,7 +27,7 @@ const getFilteredPictures = (photos) => {
       return filteredPictures;
 
     default:
-      return photos;
+      return filteredPictures;
   }
 
 };
