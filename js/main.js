@@ -1,14 +1,23 @@
 import { renderPictures } from './picture.js';
+import { showFilters, setOnFilterClick, getFilteredPictures } from './filter.js';
 import './form.js';
 import { getData } from './api.js';
-import { showAlert } from './util.js';
+import { showAlert, debounce } from './util.js';
 
-const PHOTOS_NUMBER_MAX = 25;
+const RERENDER_DELAY = 500;
 
 getData()
   .then((photos) => {
-    renderPictures(photos.slice(0, PHOTOS_NUMBER_MAX));
+
+    renderPictures(photos);
+    showFilters();
+
+    setOnFilterClick(debounce(
+      () => renderPictures(getFilteredPictures(photos)),
+      RERENDER_DELAY,
+    ));
   })
+
   .catch(
     (err) => {
       showAlert(err.message);
