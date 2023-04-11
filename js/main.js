@@ -1,14 +1,21 @@
 import { renderPictures } from './picture.js';
+import { showFilters, setOnFilterClick, getFilteredPictures } from './filter.js';
 import './form.js';
 import { getData } from './api.js';
 import { showAlert } from './util.js';
 
-const PHOTOS_NUMBER_MAX = 25;
-
 getData()
   .then((photos) => {
-    renderPictures(photos.slice(0, PHOTOS_NUMBER_MAX));
+
+    renderPictures(photos);
+    showFilters();
+
+    setOnFilterClick (() => {
+      renderPictures(getFilteredPictures(photos));
+    }
+    );
   })
+
   .catch(
     (err) => {
       showAlert(err.message);

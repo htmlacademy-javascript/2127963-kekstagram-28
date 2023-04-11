@@ -18,10 +18,15 @@ const createPicture = ({url, likes, comments, id}) => {
 
 };
 
+const removePictures = () => {
+  const picturesToRemove = picturesList.querySelectorAll('.picture');
+  picturesToRemove.forEach((picture) => picture.remove());
+};
+
 const renderPictures = (photos) => {
+  removePictures();
 
   picturesList.addEventListener ('click', (evt) => {
-
     const smallPicture = evt.target.closest('[data-picture-id]');
     if (!smallPicture) {
       return;
@@ -34,7 +39,6 @@ const renderPictures = (photos) => {
     );
 
     showBigPicture(bigPicture);
-
   });
 
 
